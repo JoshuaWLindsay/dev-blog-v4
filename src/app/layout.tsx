@@ -23,9 +23,9 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Providers>
             <div className="flex flex-col min-h-screen">
-              <Header className="flex-shrink-0" />
+              <Header />
               <main className="flex-grow overflow-auto">{children}</main>
-              <Footer className="flex-shrink-0" />
+              <Footer />
             </div>
           </Providers>
         </ThemeProvider>
