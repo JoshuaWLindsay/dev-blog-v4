@@ -65,7 +65,7 @@ export function Footer() {
             rel="noopener noreferrer"
             className="font-cursive text-muted-foreground items-center space-x-2 hover:text-[#007ACC] hover:shadow-[0_0_10px_#007ACC] transition-all duration-300"
           >
-            <span>JWL '89</span>
+            <span>JWL &apos;89</span>
           </Link>
         </div>
       </div>
