@@ -9,6 +9,13 @@ interface TypingEffectProps {
   waitUntilVisible?: boolean;
 }
 
+interface TypeItInstance {
+  getQueue: () => {
+    getItems: () => Array<{ content: string }>;
+  };
+  getElement: () => HTMLElement;
+}
+
 export function TypingEffect({
   strings,
   speed = 50,
@@ -22,7 +29,7 @@ export function TypingEffect({
           speed: speed,
           loop: false,
           waitUntilVisible: waitUntilVisible,
-          afterStep: (instance) => {
+          afterStep: (instance: TypeItInstance) => {
             const text = instance.getQueue().getItems()[0]?.content || '';
             const lines = text.split('\n');
             if (lines.length > 1) {
