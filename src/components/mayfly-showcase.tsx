@@ -43,6 +43,7 @@ export default function MayflyShowcase() {
               alt="Mayfly Logo"
               width={80}
               height={80}
+              className="h-10 w-10 md:h-20 md:w-20"
             />
           </div>
           <CardHeader>

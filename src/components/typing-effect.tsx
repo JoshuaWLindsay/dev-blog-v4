@@ -16,19 +16,13 @@ interface TypeItInstance {
   getElement: () => HTMLElement;
 }
 
-export function TypingEffect({
-  strings,
-  speed = 50,
-  waitUntilVisible = false,
-}: TypingEffectProps) {
+export function TypingEffect({ strings, speed = 50 }: TypingEffectProps) {
   return (
     <div className="font-mono">
       <TypeIt
         options={{
           strings: strings,
           speed: speed,
-          loop: false,
-          waitUntilVisible: waitUntilVisible,
           afterStep: (instance: TypeItInstance) => {
             const text = instance.getQueue().getItems()[0]?.content || '';
             const lines = text.split('\n');

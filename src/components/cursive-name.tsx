@@ -23,29 +23,27 @@ export function CursiveName({ name, className = '' }: CursiveNameProps) {
   };
 
   return (
-    <div className="pl-3">
-      <motion.span
-        className={`font-cursive inline-block ${className}`}
-        style={{ color: '#007ACC' }}
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        {name.split('').map((letter, index) => (
-          <motion.span
-            key={index}
-            variants={letterVariants}
-            transition={{
-              type: 'spring',
-              damping: 12,
-              stiffness: 200,
-            }}
-          >
-            {letter === ' ' ? '\u00A0' : letter}
-          </motion.span>
-        ))}
-      </motion.span>
-    </div>
+    <motion.span
+      className={`font-cursive inline-block ${className}`}
+      style={{ color: '#007ACC' }}
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
+      {name.split('').map((letter, index) => (
+        <motion.span
+          key={index}
+          variants={letterVariants}
+          transition={{
+            type: 'spring',
+            damping: 12,
+            stiffness: 200,
+          }}
+        >
+          {letter === ' ' ? '\u00A0' : letter}
+        </motion.span>
+      ))}
+    </motion.span>
   );
 }
 
