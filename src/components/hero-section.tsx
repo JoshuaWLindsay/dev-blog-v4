@@ -32,19 +32,19 @@ export function HeroSection() {
             size={200}
           />
         </div>
-        <div className="flex-1 max-w-[245px]">
+        <div className="flex-1 max-w-[225px]">
           <CursiveName
             name="Joshua W Lindsay"
-            className="text-4xl mb-4 pl-3 pr-3"
+            className="text-4xl mb-4 text-center md:text-left md:pl-3"
           />
-          <div className="mb-4 p-3 rounded-lg shadow-inner bg-secondary/10 min-h-[170px] md:min-w-[500px]">
+          <div className="mb-4 p-3 rounded-lg shadow-inner bg-secondary/10 md:min-h-[170px] md:min-w-[500px]">
             {cursiveNameFinished && (
               <TypingEffect
                 strings={[
                   'My Tech Stack...',
                   'JavaScript, TypeScript, React, Next.js',
                   'Python, Streamlit',
-                  'Postgres, MongoDB, S3',
+                  'S3, RDS, MongoDB, Postgres',
                   'AWS Certified Cloud Practitioner',
                   'ChatGPT, Vercel V0',
                 ]}
