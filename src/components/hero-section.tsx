@@ -34,13 +34,7 @@ export function HeroSection() {
         </div>
         <div className="flex-1">
           <CursiveName name="Joshua W Lindsay" className="text-4xl mb-4" />
-          <div
-            className="mb-4 p-3 rounded-lg shadow-inner w-full bg-secondary/10"
-            style={{
-              minHeight: '150px',
-              minWidth: '500px',
-            }}
-          >
+          <div className="mb-4 p-3 rounded-lg shadow-inner w-full bg-secondary/10 min-h-[150px] sm:min-w-[300px] md:min-w-[500px]">
             {cursiveNameFinished && (
               <TypingEffect
                 strings={[
