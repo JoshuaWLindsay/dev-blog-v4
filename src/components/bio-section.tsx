@@ -36,8 +36,7 @@ export function BioSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
-          I am a <strong>former math teacher</strong> turned <strong>Full-Stack Software Engineer</strong> with a passion for building data-intensive UIs that
-          leverage APIs and cloud services.
+          I am a <strong>former math teacher</strong> turned <strong>Full-Stack Software Engineer</strong> with a passion for building data-intensive UIs that leverage APIs and cloud services.
         </motion.p>
         <motion.p
           initial={{ opacity: 0, y: 20 }}
