@@ -44,7 +44,7 @@ export function BioSection() {
           transition={{ duration: 0.5, delay: 0.6 }}
         >
           From teaching math to at-risk students to parenting kids in foster care to
-          supporting our customers' observability needs,{' '}
+          supporting our customers&#39; observability needs,{' '}
           <strong>I love solving problems with and for people</strong>.
         </motion.p>
         <motion.p
