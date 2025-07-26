@@ -36,17 +36,16 @@ export function BioSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
-          I am a <strong>Full-Stack Software Engineer</strong> specializing in
-          JavaScript, proficient in TypeScript and Go, and an{' '}
-          <strong>AWS Certified Cloud Practitioner</strong>.
+          I am a <strong>former math teacher</strong> turned <strong>Full-Stack Software Engineer</strong> with a passion for building data-intensive UIs that
+          leverage APIs and cloud services.
         </motion.p>
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.6 }}
         >
-          From training and managing employees, teaching math to at-risk
-          students, and parenting kids in foster care,{' '}
+          From teaching math to at-risk students to parenting kids in foster care to
+          supporting our customers' observability needs,{' '}
           <strong>I love solving problems with and for people</strong>.
         </motion.p>
         <motion.p

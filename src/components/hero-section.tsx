@@ -42,11 +42,11 @@ export function HeroSection() {
               <TypingEffect
                 strings={[
                   'My Tech Stack...',
-                  'JavaScript, TypeScript, React, Next.js',
-                  'Python, Streamlit',
-                  'S3, RDS, MongoDB, Postgres',
-                  'AWS Certified Cloud Practitioner',
-                  'ChatGPT, Vercel V0',
+                  'JavaScript, TypeScript, Python, Go',
+                  'Vue, Vuetify, React, Next.js, Node.js, Express',
+                  'AWS Cert. Cloud Practitioner, Lambda, IoT Core',
+                  'RDS, DynamoDB, S3, Athena, MySQL, Postgres',
+                  'Docker, Ansible, Linux',
                 ]}
                 speed={50}
               />
