@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
+// import Link from 'next/link';
+// import { motion } from 'framer-motion';
+// import { Button } from '@/components/ui/button';
 import { Headshot } from '@/components/headshot';
 import { CursiveName } from '@/components/cursive-name';
 import { TypingEffect } from '@/components/typing-effect';
@@ -52,7 +52,7 @@ export function HeroSection() {
               />
             )}
           </div>
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -65,7 +65,7 @@ export function HeroSection() {
                 <Link href="/blog">Read Blog</Link>
               </Button>
             </div>
-          </motion.div>
+          </motion.div> */}
         </div>
       </div>
     </section>

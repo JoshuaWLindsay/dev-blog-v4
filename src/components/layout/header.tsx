@@ -18,7 +18,7 @@ export function Header() {
           </Link>
         </div>
         <nav className="flex items-center space-x-6">
-          <Link
+          {/* <Link
             href="/projects"
             className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
           >
@@ -29,7 +29,7 @@ export function Header() {
             className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
           >
             Blog
-          </Link>
+          </Link> */}
           <ThemeToggle />
         </nav>
       </div>
