@@ -1,7 +1,7 @@
-'use client';
+'use client'
 
-import Link from 'next/link';
-import { ThemeToggle } from '@/components/theme-toggle';
+import Link from 'next/link'
+import { ThemeToggle } from '@/components/theme-toggle'
 
 export function Header() {
   return (
@@ -10,7 +10,7 @@ export function Header() {
         <div className="flex items-center space-x-4">
           <Link href="/" className="flex items-center space-x-2">
             <span
-              className="inline-block font-bold font-cursive"
+              className="font-cursive inline-block font-bold"
               style={{ color: '#007ACC' }}
             >
               JWL
@@ -34,5 +34,5 @@ export function Header() {
         </nav>
       </div>
     </header>
-  );
+  )
 }

@@ -1,3 +1,15 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "root": true,
+  "extends": [
+    "next/core-web-vitals",
+    "next/typescript",
+    "plugin:prettier/recommended"
+  ],
+  "rules": {
+    "max-lines-per-function": "off",
+    "max-len": "off",
+    "id-length": "off",
+    "no-nested-ternary": "off",
+    "no-mixed-operators": "off"
+  }
 }

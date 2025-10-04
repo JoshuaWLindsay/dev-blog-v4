@@ -1,17 +1,17 @@
-'use client';
+'use client'
 
-import { motion } from 'framer-motion';
+import { motion } from 'framer-motion'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '@/components/ui/card'
 
 export function BioSection() {
   return (
-    <Card className="w-full max-w-4xl mx-auto border-none shadow-none bg-transparent">
+    <Card className="mx-auto w-full max-w-4xl border-none bg-transparent shadow-none">
       <CardHeader>
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -36,15 +36,17 @@ export function BioSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
-          I am a <strong>former math teacher</strong> turned <strong>Full-Stack Software Engineer</strong> with a passion for building data-intensive UIs that leverage APIs and cloud services.
+          I am a <strong>former math teacher</strong> turned{' '}
+          <strong>Full-Stack Software Engineer</strong> with a passion for
+          building data-intensive UIs that leverage APIs and cloud services.
         </motion.p>
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.6 }}
         >
-          From teaching math to at-risk students to parenting kids in foster care to
-          supporting our customers&#39; observability needs,{' '}
+          From teaching math to at-risk students to parenting kids in foster
+          care to supporting our customers&#39; observability needs,{' '}
           <strong>I love solving problems with and for people</strong>.
         </motion.p>
         <motion.p
@@ -57,5 +59,5 @@ export function BioSection() {
         </motion.p>
       </CardContent>
     </Card>
-  );
+  )
 }

@@ -1,18 +1,18 @@
-'use client';
+'use client'
 
-import React from 'react';
-import { motion } from 'framer-motion';
+import React from 'react'
+import { motion } from 'framer-motion'
 
 interface CursiveNameProps {
-  name: string;
-  className?: string;
+  name: string
+  className?: string
 }
 
 export function CursiveName({ name, className = '' }: CursiveNameProps) {
   const letterVariants = {
     hidden: { opacity: 0, y: 50 },
     visible: { opacity: 1, y: 0 },
-  };
+  }
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -20,7 +20,7 @@ export function CursiveName({ name, className = '' }: CursiveNameProps) {
       opacity: 1,
       transition: { staggerChildren: 0.12, delayChildren: 0.04 * i },
     }),
-  };
+  }
 
   return (
     <motion.span
@@ -44,7 +44,7 @@ export function CursiveName({ name, className = '' }: CursiveNameProps) {
         </motion.span>
       ))}
     </motion.span>
-  );
+  )
 }
 
 export default function CursiveNameWithStyles() {
@@ -60,5 +60,5 @@ export default function CursiveNameWithStyles() {
       `}</style>
       <CursiveName name="Your Name" />
     </>
-  );
+  )
 }

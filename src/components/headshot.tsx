@@ -1,23 +1,23 @@
-'use client';
+'use client'
 
-import Image from 'next/image';
-import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from 'next-themes';
+import Image from 'next/image'
+import { useEffect, useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { useTheme } from 'next-themes'
 
 interface HeadshotProps {
-  lightModeLiveSrc: string;
-  lightModeBitSrc: string;
-  darkModeLiveSrc: string;
-  darkModeBitSrc: string;
-  alt: string;
-  size?: number | string;
+  lightModeLiveSrc: string
+  lightModeBitSrc: string
+  darkModeLiveSrc: string
+  darkModeBitSrc: string
+  alt: string
+  size?: number | string
   animation?: {
-    initial?: object;
-    animate?: object;
-    transition?: object;
-  };
-  toggleable?: boolean;
+    initial?: object
+    animate?: object
+    transition?: object
+  }
+  toggleable?: boolean
 }
 
 export function Headshot({
@@ -34,26 +34,25 @@ export function Headshot({
   },
   toggleable = true,
 }: HeadshotProps) {
-  const { theme, resolvedTheme } = useTheme();
-  const [isMounted, setIsMounted] = useState(false);
-  const [isPrimaryImage, setIsPrimaryImage] = useState(true);
-  const [hasError, setHasError] = useState(false);
+  const { theme, resolvedTheme } = useTheme()
+  const [isMounted, setIsMounted] = useState(false)
+  const [isPrimaryImage, setIsPrimaryImage] = useState(true)
+  const [hasError, setHasError] = useState(false)
 
   // Ensure component is mounted to avoid hydration mismatches
   useEffect(() => {
-    setIsMounted(true);
-  }, []);
+    setIsMounted(true)
+  }, [])
 
   // Determine if dark mode is active
-  const isDarkMode =
-    isMounted && (theme === 'dark' || resolvedTheme === 'dark');
+  const isDarkMode = isMounted && (theme === 'dark' || resolvedTheme === 'dark')
 
   // Toggle between primary and secondary images
   const toggleImage = () => {
     if (toggleable) {
-      setIsPrimaryImage((prev) => !prev);
+      setIsPrimaryImage((prev) => !prev)
     }
-  };
+  }
 
   // Determine the appropriate image source based on theme and toggle state
   const imageSrc = isDarkMode
@@ -61,16 +60,16 @@ export function Headshot({
       ? darkModeLiveSrc
       : darkModeBitSrc
     : isPrimaryImage
-    ? lightModeLiveSrc
-    : lightModeBitSrc;
+      ? lightModeLiveSrc
+      : lightModeBitSrc
 
   // Handle keyboard interactions for accessibility
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (toggleable && (event.key === 'Enter' || event.key === ' ')) {
-      event.preventDefault();
-      toggleImage();
+      event.preventDefault()
+      toggleImage()
     }
-  };
+  }
 
   return (
     <motion.div
@@ -119,5 +118,5 @@ export function Headshot({
         </AnimatePresence>
       </div>
     </motion.div>
-  );
+  )
 }

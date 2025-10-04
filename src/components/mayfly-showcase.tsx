@@ -1,9 +1,9 @@
-'use client';
+'use client'
 
-import { motion } from 'framer-motion';
-import { ArrowRight, Cloud, Users, Clock } from 'lucide-react';
-import Image from 'next/image';
-import { Button } from '@/components/ui/button';
+import { motion } from 'framer-motion'
+import { ArrowRight, Cloud, Users, Clock } from 'lucide-react'
+import Image from 'next/image'
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -11,7 +11,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '@/components/ui/card'
 
 export default function MayflyShowcase() {
   const features = [
@@ -27,7 +27,7 @@ export default function MayflyShowcase() {
       icon: <Clock className="h-6 w-6" />,
       text: 'Automated infrastructure provisioning',
     },
-  ];
+  ]
 
   return (
     <motion.div
@@ -35,9 +35,9 @@ export default function MayflyShowcase() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <Card className="w-full max-w-4xl mx-auto">
+      <Card className="mx-auto w-full max-w-4xl">
         <div className="relative">
-          <div className="absolute top-6 right-6 overflow-hidden">
+          <div className="absolute right-6 top-6 overflow-hidden">
             <Image
               src="/images/transparentMayflyLogoNoText.png"
               alt="Mayfly Logo"
@@ -76,7 +76,7 @@ export default function MayflyShowcase() {
               dedicated user sessions directly in the browser.
             </motion.p>
             <motion.div
-              className="grid grid-cols-1 md:grid-cols-3 gap-4"
+              className="grid grid-cols-1 gap-4 md:grid-cols-3"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 0.5 }}
@@ -113,5 +113,5 @@ export default function MayflyShowcase() {
         </div>
       </Card>
     </motion.div>
-  );
+  )
 }
