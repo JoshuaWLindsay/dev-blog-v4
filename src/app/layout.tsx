@@ -1,11 +1,25 @@
 import '@/app/globals.css'
-import { Inter } from 'next/font/google'
+import localFont from 'next/font/local'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
 import { Providers } from './providers'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = localFont({
+  src: [
+    {
+      path: '../../public/fonts/inter/InterVariable.woff2',
+      weight: '100 900',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/inter/InterVariable-Italic.woff2',
+      weight: '100 900',
+      style: 'italic',
+    },
+  ],
+  display: 'swap',
+})
 
 export const metadata = {
   title: 'Joshua Lindsay - Developer Portfolio',
