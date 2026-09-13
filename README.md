@@ -4,6 +4,11 @@ The unlisted `/weather` tablet dashboard has its own [setup and verification gui
 
 ## Getting Started
 
+Use Node.js 24 LTS. With nvm, run `nvm install` and `nvm use` in this directory.
+The `engines.node` setting in `package.json` selects Node.js 24.x for Vercel builds
+and functions on the next deployment. In Vercel's **Settings → Build and Deployment
+→ Node.js Version**, select **24.x** as well to keep the dashboard setting aligned.
+
 First, run the development server:
 
 ```bash

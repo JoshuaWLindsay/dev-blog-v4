@@ -88,7 +88,7 @@ CSS and portrait/landscape layout.
 
 ## Verification
 
-Use Node.js 20 or newer:
+Use Node.js 24 LTS (matching Vercel and `.nvmrc`):
 
 ```sh
 npm run test:weather
