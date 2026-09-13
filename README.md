@@ -1,5 +1,7 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+The unlisted `/weather` tablet dashboard has its own [setup and verification guide](docs/weather.md).
+
 ## Getting Started
 
 First, run the development server:
