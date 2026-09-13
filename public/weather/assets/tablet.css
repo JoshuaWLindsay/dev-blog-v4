@@ -4,18 +4,13 @@ html { font-size: 1vw; }
 body { font-family: Arial, Helvetica, sans-serif; font-weight: 400; -webkit-text-size-adjust: 100%; }
 * { box-sizing: border-box; }
 .tablet { width: 100%; min-height: 100vh; padding: 1vh 3rem 2.5vh; display: flex; flex-direction: column; }
-.temperature { text-align: center; font-size: 25.5rem; line-height: 1; margin: 1vh 0 1vh; white-space: nowrap; }
+.temperature { text-align: center; font-size: 33.15rem; line-height: 1; margin: 1vh 0 1vh; white-space: nowrap; }
 .conditions { margin: 0 auto; width: 80rem; font-size: 8.2rem; line-height: 1.25; }
 .condition { display: flex; align-items: baseline; margin-bottom: 1.6vh; white-space: nowrap; }
 .label { flex: 0 0 26rem; }
-.lightning-title { margin-top: .2vh; }
-.lightning { margin: 1vh 0 0 8.5rem; font-size: 5.45rem; line-height: 1.2; }
-.lightning div { display: flex; margin-bottom: 1.2vh; white-space: nowrap; }
-.lightning dt { flex: 0 0 42rem; }
-.lightning dd { margin: 0; }
 .clock-block { margin-top: auto; padding-top: 2vh; text-align: center; }
-.clock { font-size: 25.5rem; line-height: 1; white-space: nowrap; }
-.date { font-size: 7.8rem; line-height: 1.2; white-space: nowrap; }
+.clock { font-size: 33.15rem; line-height: 1; white-space: nowrap; }
+.day, .date { font-size: 11.7rem; line-height: 1.1; white-space: nowrap; }
 .status { position: fixed; top: 0; left: 0; width: 100%; margin: 0; padding: 4px 8px; background: #000; color: #ddd; text-align: center; font-size: 14px; line-height: 1.2; }
 .status:empty { display: none; }
 @media (orientation: portrait) and (min-aspect-ratio: 3/4) {
@@ -23,14 +18,11 @@ body { font-family: Arial, Helvetica, sans-serif; font-weight: 400; -webkit-text
 }
 @media (orientation: landscape) {
   .tablet { min-height: 100vh; padding: 2vh 3vw 3vh; }
-  .temperature { font-size: 21vh; margin: 0 0 1vh; }
+  .temperature { font-size: 27.3vh; margin: 0 0 1vh; }
   .conditions { font-size: 6vh; line-height: 1.15; margin: 0 auto; width: 75vh; }
   .condition { margin-bottom: 1.5vh; }
   .label { flex-basis: 23vh; }
-  .lightning { font-size: 4.4vh; line-height: 1.1; margin: 1vh 0 0 7vh; }
-  .lightning dt { flex-basis: 37vh; }
-  .lightning div { margin-bottom: 1vh; }
   .clock-block { padding-top: 1vh; }
-  .clock { font-size: 18vh; }
-  .date { font-size: 6.5vh; }
+  .clock { font-size: 23.4vh; }
+  .day, .date { font-size: 9.75vh; }
 }

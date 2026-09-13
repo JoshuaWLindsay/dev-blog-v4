@@ -41,9 +41,9 @@
         var now = new Date();
         var local = centralTime(now);
         put('clock', (local.getUTCHours() % 12 || 12) + ':' + pad(local.getUTCMinutes()));
-        put('date', days[local.getUTCDay()] + '  ' + months[local.getUTCMonth()] + ' ' + local.getUTCDate());
+        put('day', days[local.getUTCDay()]);
+        put('date', months[local.getUTCMonth()] + ' ' + local.getUTCDate());
         if (latest) {
-            put('lightning-last', age(latest.lightning_last_epoch));
             var stale = latest.stale || failed || now.getTime() / 1000 - latest.observed_at > 300;
             put('status', stale ? 'Weather may be out of date. Last reading ' + age(latest.observed_at).toLowerCase() + ' ago. Retrying...' : '');
         }
@@ -57,8 +57,6 @@
         document.getElementById('temperature').setAttribute('aria-label', valid(data.temperature_f) ? data.temperature_f.toFixed(1) + ' degrees Fahrenheit' : 'Temperature unavailable');
         put('rain', data.raining === true ? 'YES' : data.raining === false ? 'NONE' : '--');
         put('wind', (data.wind_direction || '--') + ' ' + (valid(data.wind_mph) ? data.wind_mph.toFixed(1) : '--') + ' mph');
-        put('lightning-distance', valid(data.lightning_distance_miles) ? data.lightning_distance_miles.toFixed(1) + ' miles' : '--');
-        put('lightning-count', valid(data.lightning_count_3hr) ? String(data.lightning_count_3hr) : '--');
         tick();
     }
 
@@ -107,12 +105,15 @@
 
     function fitDate() {
         var element = document.getElementById('date');
+        var day = document.getElementById('day');
         var landscape = window.innerWidth > window.innerHeight;
-        var size = landscape ? window.innerHeight * 0.065 : Math.min(window.innerWidth, window.innerHeight * 0.75) * 0.078;
+        var size = landscape ? window.innerHeight * 0.0975 : Math.min(window.innerWidth, window.innerHeight * 0.75) * 0.117;
         element.style.fontSize = size + 'px';
-        // September / Wednesday must fit just as well as shorter dates.
-        if (element.scrollWidth > element.clientWidth) {
-            element.style.fontSize = Math.floor(size * element.clientWidth / element.scrollWidth) + 'px';
+        day.style.fontSize = size + 'px';
+        // Keep both lines equally sized, even for September / Wednesday.
+        var scale = Math.min(1, element.clientWidth / element.scrollWidth, day.clientWidth / day.scrollWidth);
+        if (scale < 1) {
+            element.style.fontSize = day.style.fontSize = Math.floor(size * scale) + 'px';
         }
     }
 

@@ -13,6 +13,11 @@ Weather responses have `X-Robots-Tag: noindex, nofollow, noarchive`, `no-store`,
 namespace-scoped security headers. This is public and unlisted, with no login and
 no navigation or sitemap entry.
 
+The display shows temperature, rain, wind, and the Central Time clock, with the
+weekday above the month/day. Temperature and time are 30% larger than the original
+layout; the two date lines are 50% larger, with automatic width fitting. Lightning
+is no longer displayed; its API fields remain available for compatibility.
+
 ## Weather subdomain
 
 The same deployment also serves the dashboard at `https://weather.joshuawlindsay.dev/`.
@@ -78,7 +83,7 @@ The client polls 60 seconds after each completed request, with a 20-second timeo
 and refreshes on visibility, page restore and connectivity events. A wall-clock
 check cancels requests suspended during sleep; late responses cannot overwrite
 newer readings. The Central Time clock runs independently using US DST rules,
-without `Intl`. The client remains ES5/XHR with the original Safari 12-compatible
+without `Intl`. The client remains ES5/XHR with Safari 12-compatible
 CSS and portrait/landscape layout.
 
 ## Verification

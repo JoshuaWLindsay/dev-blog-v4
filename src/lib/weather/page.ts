@@ -22,15 +22,10 @@ export const weatherHtml = `<!doctype html>
     <section class="conditions" aria-label="Current conditions">
       <div class="condition"><span class="label">Rain:</span><span id="rain">--</span></div>
       <div class="condition"><span class="label">Wind:</span><span id="wind">--</span></div>
-      <div class="lightning-title">Lightning:</div>
-      <dl class="lightning">
-        <div><dt>Last Detected:</dt><dd id="lightning-last">--</dd></div>
-        <div><dt>Distance:</dt><dd id="lightning-distance">--</dd></div>
-        <div><dt>Last 3 hours:</dt><dd id="lightning-count">--</dd></div>
-      </dl>
     </section>
     <footer class="clock-block" aria-label="Current time and date, Central Time">
       <div class="clock" id="clock">--:--</div>
+      <div class="day" id="day">Loading day</div>
       <div class="date" id="date">Loading date</div>
     </footer>
   </main>

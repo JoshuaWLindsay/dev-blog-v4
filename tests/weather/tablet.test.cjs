@@ -59,17 +59,15 @@ function weather(extra = {}) {
     }, extra);
 }
 
-test('formats the reference layout and advances the clock without a fetch', () => {
+test('formats the dashboard with a two-line date and advances the clock without a fetch', () => {
     const b = browser();
     b.respond(weather());
     assert.equal(b.elements.temperature.textContent, '102.7');
     assert.equal(b.elements.rain.textContent, 'NONE');
     assert.equal(b.elements.wind.textContent, 'WSW 4.7 mph');
-    assert.equal(b.elements['lightning-last'].textContent, '16 hours');
-    assert.equal(b.elements['lightning-distance'].textContent, '21.5 miles');
-    assert.equal(b.elements['lightning-count'].textContent, '124');
     assert.equal(b.elements.clock.textContent, '10:43');
-    assert.equal(b.elements.date.textContent, 'Saturday  September 12');
+    assert.equal(b.elements.day.textContent, 'Saturday');
+    assert.equal(b.elements.date.textContent, 'September 12');
     assert.equal(b.elements.status.textContent, '');
     b.advance(60000);
     assert.equal(b.elements.clock.textContent, '10:44');
@@ -88,7 +86,8 @@ test('Central Time changes correctly at both DST boundaries and midnight', () =>
     const midnight = browser('2026-09-13T04:59:00Z');
     midnight.advance(60000);
     assert.equal(midnight.elements.clock.textContent, '12:00');
-    assert.equal(midnight.elements.date.textContent, 'Sunday  September 13');
+    assert.equal(midnight.elements.day.textContent, 'Sunday');
+    assert.equal(midnight.elements.date.textContent, 'September 13');
 });
 
 test('keeps readings during failure, warns, retries, and recovers', () => {
@@ -138,9 +137,6 @@ test('distinguishes missing readings from measured zeroes', () => {
     assert.equal(b.elements.temperature.textContent, '--.-');
     assert.equal(b.elements.rain.textContent, '--');
     assert.equal(b.elements.wind.textContent, 'WSW 0.0 mph');
-    assert.equal(b.elements['lightning-last'].textContent, 'None');
-    assert.equal(b.elements['lightning-distance'].textContent, '--');
-    assert.equal(b.elements['lightning-count'].textContent, '0');
 });
 
 test('uses the dedicated API, a 20-second timeout, and ES5 syntax', () => {
