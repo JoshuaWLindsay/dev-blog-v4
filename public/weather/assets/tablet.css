@@ -4,6 +4,7 @@ html { font-size: 1vw; }
 body { font-family: Arial, Helvetica, sans-serif; font-weight: 400; -webkit-text-size-adjust: 100%; }
 * { box-sizing: border-box; }
 .tablet { width: 100%; min-height: 100vh; padding: 1vh 3rem 2.5vh; display: flex; flex-direction: column; }
+.temperature, .clock { font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", sans-serif; font-weight: 300; }
 .temperature { text-align: center; font-size: 38.1225rem; line-height: 1; margin: .5vh 0 .5vh; white-space: nowrap; }
 .conditions { margin: 0 auto; width: 80rem; font-size: 8.2rem; line-height: 1.15; }
 .condition { text-align: center; margin-bottom: .5vh; white-space: nowrap; }

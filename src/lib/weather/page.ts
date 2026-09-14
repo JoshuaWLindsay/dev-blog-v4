@@ -14,6 +14,7 @@ export const weatherHtml = `<!doctype html>
   <title>Weather Tablet</title>
   <link rel="icon" href="/weather/assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/weather/assets/tablet.css">
+  <script src="/weather/assets/rapid-wind.js" defer></script>
   <script src="/weather/assets/tablet.js" defer></script>
 </head>
 <body>

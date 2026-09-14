@@ -1,4 +1,5 @@
 import 'server-only'
+import { fullWeatherGroups, FullObservation } from './full-schema'
 
 // Port of weather-app/src/tablet_weather.py. All provider access stays here.
 type Observation = {
@@ -62,6 +63,40 @@ export function normalize(payload: unknown): Observation {
   }
 }
 
+export function normalizeFull(payload: unknown): FullObservation {
+  const summary = normalize(payload)
+  const obs = (payload as { obs: Record<string, unknown>[] }).obs[0]
+  return {
+    observed_at: summary.observed_at,
+    groups: fullWeatherGroups.map((group) => ({
+      id: group.id,
+      metrics: group.metrics.map((spec) => {
+        const raw = obs[spec.key]
+        let value: number | string | null = number(raw)
+        if (spec.format === 'trend') {
+          value =
+            raw === 'rising'
+              ? 'Rising'
+              : raw === 'falling'
+                ? 'Falling'
+                : raw === 'steady'
+                  ? 'Steady'
+                  : null
+        } else if (typeof value === 'number') {
+          value = value * (spec.multiplier ?? 1) + (spec.offset ?? 0)
+          if (!Number.isFinite(value)) value = null
+        }
+        if (
+          spec.key === 'lightning_strike_last_distance' &&
+          (!summary.lightning_last_epoch || summary.lightning_last_epoch <= 0)
+        )
+          value = null
+        return { key: spec.key, value }
+      }),
+    })),
+  }
+}
+
 export function stationUrl(
   env: Record<string, string | undefined> = process.env
 ): URL {
@@ -79,6 +114,7 @@ export function stationUrl(
     token,
     units_temp: 'c',
     units_wind: 'mps',
+    units_pressure: 'mb',
     units_precip: 'mm',
     units_distance: 'km',
   }).toString()
@@ -104,6 +140,7 @@ export async function fetchObservation(): Promise<unknown> {
 
 export class WeatherService {
   private cached: Observation | null = null
+  private cachedFull: FullObservation | null = null
   private lastAttempt: number | null = null
   private failed = false
   private pending: Promise<void> | null = null
@@ -139,9 +176,30 @@ export class WeatherService {
     }
   }
 
+  async getFull() {
+    await this.get()
+    if (this.cachedFull === null) {
+      return {
+        data: { error: 'Weather unavailable. Retrying automatically.' },
+        status: 503,
+      }
+    }
+    return {
+      data: {
+        ...this.cachedFull,
+        stale: this.failed || this.clock() - this.cachedFull.observed_at > 300,
+      },
+      status: 200,
+    }
+  }
+
   private async update() {
     try {
-      this.cached = normalize(await this.fetcher())
+      const payload = await this.fetcher()
+      const summary = normalize(payload)
+      const full = normalizeFull(payload)
+      this.cached = summary
+      this.cachedFull = full
       this.failed = false
     } catch {
       // Do not return or log exceptions: provider URLs can contain credentials.

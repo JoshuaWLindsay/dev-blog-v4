@@ -23,7 +23,7 @@ function withHost(host) {
 }
 
 test('weather routes are isolated, noindex, and uncached over HTTP', async () => {
-    for (const path of ['/weather', '/weather/assets/tablet.css', '/weather/assets/tablet.js', '/weather/assets/favicon.svg', '/weather/api']) {
+    for (const path of ['/weather', '/weather/assets/tablet.css', '/weather/assets/tablet.js', '/weather/assets/rapid-wind.js', '/weather/assets/favicon.svg', '/weather/api']) {
         const response = await fetch(base + path);
         assert.ok(response.ok || (path === '/weather/api' && response.status === 503), path);
         assert.match(response.headers.get('x-robots-tag'), /noindex/);
@@ -37,7 +37,7 @@ test('weather routes are isolated, noindex, and uncached over HTTP', async () =>
             assert.match(response.headers.get('content-type'), /text\/html/);
             assert.doesNotMatch(body, /_next|__NEXT|<nav/);
             assert.match(body, /name="robots" content="noindex/);
-            assert.equal((body.match(/<script\b/g) || []).length, 1);
+            assert.equal((body.match(/<script\b/g) || []).length, 2);
         }
         if (path === '/weather/api') {
             const data = JSON.parse(body);

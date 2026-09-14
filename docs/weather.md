@@ -5,7 +5,7 @@ layout, navigation, React runtime, and hydration. The original weather-app proje
 is unchanged and is not needed at runtime.
 
 - `/weather`: dashboard with a `noindex` meta tag.
-- `/weather/assets/tablet.css`, `tablet.js`, `favicon.svg`: isolated assets.
+- `/weather/assets/tablet.css`, `tablet.js`, `rapid-wind.js`, `favicon.svg`: isolated assets.
 - `/weather/api`: the original normalized JSON contract (200), or a generic error
   (503) when no cached observation is available.
 
@@ -124,3 +124,89 @@ runtime. Physical iOS 12 hardware and the public DNS/deployment remain unverifie
 
 References: [Next.js Route Handlers](https://nextjs.org/docs/app/api-reference/file-conventions/route),
 [Tempest API](https://weatherflow.github.io/Tempest/api/).
+
+
+## Full observation dashboard
+
+`https://weather.joshuawlindsay.dev/full` is the desktop dashboard. It is also
+available at `/weather/full` on the main site and preview deployments. Its plain
+HTML route bypasses the site layout and framework runtime, just like the tablet
+page. The `/full` rewrite applies only to the weather subdomain.
+
+Six panels cover all 36 measurements returned by the station's latest-observation
+endpoint; the observation timestamp is shown in the header (37 observation fields
+in total). They include temperature and comfort, wind, rainfall and corrected
+accumulations/durations, pressure/humidity/density, sun/UV, and lightning. Values
+that the provider omits appear as dashes. No forecasts, historical extrema, or
+measurements from other endpoints are invented. The rain analysis code is shown
+as the provider's code, without guessing its meaning.
+
+`/weather/api/full` exposes an explicit weather-only allowlist, with no station
+metadata, location, credentials or arbitrary provider fields. Both API routes
+share the same five-second cache and in-flight request per server instance. The
+original tablet JSON contract and layout remain intact. Full readings convert
+Celsius to Fahrenheit, m/s to mph, mm to inches, km to miles and mb to inHg. Delta T
+is a temperature difference (multiply by 1.8, without adding 32). Air density stays
+in kg/m³; solar radiation in W/m²; illuminance in lux. Actual new-observation timing
+is controlled by the weather provider.
+
+The clock uses Central Time. Stale and offline readings stay visible with a
+warning, and sleeping requests cannot overwrite newer observations after waking.
+Desktop and landscape iPad use three columns; portrait iPad uses two columns.
+Phones and unusually short windows can scroll to retain readable text. The Full
+screen button appears only when the browser supports it and requires a click/tap;
+Home Screen launch remains available on older iPads. No external assets or
+framework scripts are needed by the full page.
+
+`npm run test:weather` includes full-dashboard normalization, cache, rendering,
+timeout/recovery, fullscreen fallback, and ES5 checks. With a production server
+running, check both HTTP suites:
+
+```sh
+node --test tests/weather/http.test.cjs tests/weather/full-http.test.cjs
+```
+
+The design targets 1366×768 and larger desktop screens, plus 1024×768 and 768×1024
+iPads. Browser emulation cannot verify a physical iOS 12 device or its TLS support.
+
+Full-dashboard verification (September 13, 2026): production build, lint and types
+passed; 27 backend/client checks and 6 production HTTP checks passed, including
+fresh live station data and the subdomain rewrite. Inspected live readings in
+Brave on desktop and at a 768×892 portrait viewport with all measurements and the
+footer visible. Physical iOS 12 hardware remains unverified.
+
+## Rapid wind on the main tablet page
+
+The main page displays a current `rapid_wind` sample instead of `wind_avg`.
+The average, gust and lull remain on `/full`. Temperature and rain still use
+the station observation endpoint, which normally publishes once per minute.
+
+The browser requests `/weather/api/wind` on a five-second start-to-start cadence
+using ES5/XHR. It never contacts Tempest directly. Node 24 opens a bounded outbound
+WebSocket, subscribes to the configured station's active wind device, receives
+one current sample, closes the socket, and returns only its timestamp, mph and
+compass direction. Metadata discovery takes at most five seconds; the socket
+times out after eight seconds. No persistent relay or new environment variables
+are required: the existing station ID/token also discover the active device.
+Device metadata is cached for an hour; simultaneous requests within one warm
+server instance share a sample request and attempts are limited to every five
+seconds. Nothing depends on a socket running after the HTTP response finishes.
+
+A sample expires after 15 seconds. If live wind is unavailable, the tablet
+explicitly labels its fallback to the one-minute average in the status line.
+The feed retries automatically, pauses when hidden and recovers after sleep.
+Provider sampling (normally three seconds), network latency, and power-saving
+modes determine when new values actually arrive; identical readings are valid.
+
+Tests cover discovery, current-sample conversion, socket cleanup/timeouts, shared
+requests, ES5, cadence, fallback, and hidden/sleep recovery. The HTTP wind check
+requires `WEATHER_TEST_LIVE=1` to verify a fresh sample and a later timestamp on
+the next poll. Deployment still needs a check on the physical iOS 12 iPad.
+
+Reference: [Tempest WebSocket API](https://weatherflow.github.io/Tempest/api/ws.html).
+
+Rapid-wind verification (September 13, 2026): production build, lint and types
+passed; 38 backend/browser checks and eight production HTTP checks passed. The
+live rapid feed returned a newer sample six seconds after the prior sample.
+Brave rendered current wind and the updated NO RAIN label on the main page.
+The main temperature and clock use a light system font (weight 300).

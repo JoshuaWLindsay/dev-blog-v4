@@ -45,7 +45,8 @@
         put('date', months[local.getUTCMonth()] + ' ' + local.getUTCDate());
         if (latest) {
             var stale = latest.stale || failed || now.getTime() / 1000 - latest.observed_at > 300;
-            put('status', stale ? 'Weather may be out of date. Last reading ' + age(latest.observed_at).toLowerCase() + ' ago. Retrying...' : '');
+            var windStatus = window.weatherRapidWind ? window.weatherRapidWind.render(latest) : '';
+            put('status', stale ? 'Weather may be out of date. Last reading ' + age(latest.observed_at).toLowerCase() + ' ago. Retrying...' : windStatus);
         }
         fitDisplay();
         // Safari can suspend XHR timeout delivery while the tablet sleeps.
@@ -55,7 +56,7 @@
     function render(data) {
         put('temperature', valid(data.temperature_f) ? data.temperature_f.toFixed(1) : '--.-');
         document.getElementById('temperature').setAttribute('aria-label', valid(data.temperature_f) ? data.temperature_f.toFixed(1) + ' degrees Fahrenheit' : 'Temperature unavailable');
-        put('rain', data.raining === true ? 'YES' : data.raining === false ? 'NONE' : '--');
+        put('rain', data.raining === true ? 'YES' : data.raining === false ? 'NO RAIN' : '--');
         put('wind', (data.wind_direction || '--') + ' ' + (valid(data.wind_mph) ? data.wind_mph.toFixed(1) : '--') + ' mph');
         tick();
     }

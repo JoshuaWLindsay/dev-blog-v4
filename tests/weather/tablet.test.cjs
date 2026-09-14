@@ -63,7 +63,7 @@ test('formats the dashboard with a two-line date and advances the clock without 
     const b = browser();
     b.respond(weather());
     assert.equal(b.elements.temperature.textContent, '102.7');
-    assert.equal(b.elements.rain.textContent, 'NONE');
+    assert.equal(b.elements.rain.textContent, 'NO RAIN');
     assert.equal(b.elements.wind.textContent, 'WSW 4.7 mph');
     assert.equal(b.elements.clock.textContent, '10:43');
     assert.equal(b.elements.day.textContent, 'Saturday');

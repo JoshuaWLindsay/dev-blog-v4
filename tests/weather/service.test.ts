@@ -151,6 +151,7 @@ test('only server environment variables configure the fixed provider with explic
     token: 'private value',
     units_temp: 'c',
     units_wind: 'mps',
+    units_pressure: 'mb',
     units_precip: 'mm',
     units_distance: 'km',
   })
@@ -203,7 +204,8 @@ test('HTML bypasses React, is noindex, and uses only dedicated asset URLs', asyn
   const html = await response.text()
   expect(response.headers.get('content-type')).toBe('text/html; charset=utf-8')
   expect(html).toContain('name="robots" content="noindex, nofollow, noarchive"')
-  expect(html.match(/<script\b/g)).toHaveLength(1)
+  expect(html.match(/<script\b/g)).toHaveLength(2)
+  expect(html).toContain('src="/weather/assets/rapid-wind.js"')
   expect(html).toContain('src="/weather/assets/tablet.js"')
   expect(html).toContain('href="/weather/assets/tablet.css"')
   expect(html).not.toMatch(/_next|__NEXT|<nav|WEATHERFLOW|\/static\//)
