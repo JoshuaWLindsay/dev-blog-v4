@@ -74,16 +74,16 @@ test('rejects malformed observations and provider failures', () => {
   }
 })
 
-test('caches for one minute, preserves stale readings on failure, and recovers', async () => {
+test('caches for five seconds, preserves stale readings on failure, and recovers', async () => {
   let now = 1700000000
   const fetcher = jest
     .fn()
     .mockResolvedValueOnce(sample())
     .mockRejectedValueOnce(new Error('secret-token'))
-    .mockResolvedValueOnce(sample({ timestamp: 1700000120 }))
+    .mockResolvedValueOnce(sample({ timestamp: 1700000010 }))
   const service = new WeatherService(fetcher, () => now)
   expect((await service.get()).data).toMatchObject({ stale: false })
-  now += 59
+  now += 4
   await service.get()
   expect(fetcher).toHaveBeenCalledTimes(1)
   now += 1
@@ -92,7 +92,7 @@ test('caches for one minute, preserves stale readings on failure, and recovers',
     data: { temperature_f: 77, stale: true },
   })
   expect(JSON.stringify(await service.get())).not.toContain('secret-token')
-  now += 60
+  now += 5
   expect((await service.get()).data).toMatchObject({ stale: false })
   expect(fetcher).toHaveBeenCalledTimes(3)
 })
@@ -135,7 +135,7 @@ test('old provider observations are stale; cold errors are generic, throttled an
   })
   await service.get()
   expect(fetcher).toHaveBeenCalledTimes(1)
-  now += 60
+  now += 5
   await service.get()
   expect(fetcher).toHaveBeenCalledTimes(2)
 })

@@ -14,8 +14,10 @@ namespace-scoped security headers. This is public and unlisted, with no login an
 no navigation or sitemap entry.
 
 The display shows temperature, rain, wind, and the Central Time clock, with the
-weekday above the month/day. Temperature and time are 30% larger than the original
-layout; the two date lines are 50% larger, with automatic width fitting. Lightning
+weekday above the month/day. Rain and wind readings are centered without visible
+labels. Temperature and time are another 15% larger than the previous dashboard
+(49.5% larger than the original layout), with width fitting for longer readings.
+The two date lines retain their existing size and automatic width fitting. Lightning
 is no longer displayed; its API fields remain available for compatibility.
 
 ## Weather subdomain
@@ -73,18 +75,19 @@ after `/observations/station/` in the original `station_endpoint`; the separate
 device ID and `device_endpoint` are not needed.
 
 Provider requests have a 15-second total timeout. A warm server instance shares
-in-flight requests and caches readings and failed attempts for 60 seconds. Failed
+in-flight requests and caches readings and failed attempts for five seconds. Failed
 refreshes return the previous observation with `stale: true`; readings older than
 five minutes are also stale. Like the Python source, the cache is process-local:
 serverless cold starts and separate instances do not share it. The tablet retains
 its last reading across API failures, including a cold instance's 503.
 
-The client polls 60 seconds after each completed request, with a 20-second timeout,
+The client polls five seconds after each completed request, with a 20-second timeout,
 and refreshes on visibility, page restore and connectivity events. A wall-clock
 check cancels requests suspended during sleep; late responses cannot overwrite
 newer readings. The Central Time clock runs independently using US DST rules,
 without `Intl`. The client remains ES5/XHR with Safari 12-compatible
-CSS and portrait/landscape layout.
+CSS and portrait/landscape layout. The provider may publish new observations less
+frequently than the five-second polling interval.
 
 ## Verification
 
@@ -100,7 +103,7 @@ node --test tests/weather/http.test.cjs
 
 The focused Jest configuration leaves the pre-existing configuration unchanged.
 Checks cover conversions, missing data, cache timing/concurrency, stale fallback,
-timeouts, secret isolation, Central Time/DST, ES5 syntax, one-minute polling, sleep
+timeouts, secret isolation, Central Time/DST, ES5 syntax, five-second polling, sleep
 recovery and raw HTML. HTTP checks inspect built routes and regular site pages.
 Set `WEATHER_TEST_BASE_URL` for another origin and `WEATHER_TEST_LIVE=1` to require
 a fresh live observation instead of allowing an unconfigured 503.

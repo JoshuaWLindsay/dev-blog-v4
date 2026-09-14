@@ -47,7 +47,7 @@
             var stale = latest.stale || failed || now.getTime() / 1000 - latest.observed_at > 300;
             put('status', stale ? 'Weather may be out of date. Last reading ' + age(latest.observed_at).toLowerCase() + ' ago. Retrying...' : '');
         }
-        fitDate();
+        fitDisplay();
         // Safari can suspend XHR timeout delivery while the tablet sleeps.
         if (pending && now.getTime() - requestStarted >= 20000) { refresh(); }
     }
@@ -77,7 +77,7 @@
             failed = !ok;
             if (!latest) { put('status', 'Weather unavailable. Retrying automatically...'); }
             tick();
-            timer = setTimeout(refresh, 60000);
+            timer = setTimeout(refresh, 5000);
         }
         cancelRequest = function () { complete(false); xhr.abort(); };
         xhr.onload = function () {
@@ -103,7 +103,7 @@
         } catch (ignore) { complete(false); }
     }
 
-    function fitDate() {
+    function fitDisplay() {
         var element = document.getElementById('date');
         var day = document.getElementById('day');
         var landscape = window.innerWidth > window.innerHeight;
@@ -115,12 +115,23 @@
         if (scale < 1) {
             element.style.fontSize = day.style.fontSize = Math.floor(size * scale) + 'px';
         }
+        // Enlarge readings by 15%, fitting longer values such as 102.7 and 10:43.
+        var portraitSize = Math.min(window.innerWidth, window.innerHeight * 0.75) * 0.381225;
+        var ids = ['temperature', 'clock'];
+        var sizes = landscape ? [window.innerHeight * 0.31395, window.innerHeight * 0.2691] : [portraitSize, portraitSize];
+        for (var i = 0; i < ids.length; i += 1) {
+            var reading = document.getElementById(ids[i]);
+            reading.style.fontSize = sizes[i] + 'px';
+            if (reading.scrollWidth > reading.clientWidth) {
+                reading.style.fontSize = Math.floor(sizes[i] * reading.clientWidth / reading.scrollWidth) + 'px';
+            }
+        }
     }
 
     document.addEventListener('visibilitychange', function () { if (!document.hidden) { tick(); refresh(); } });
     window.addEventListener('pageshow', function () { tick(); refresh(); });
     window.addEventListener('online', refresh);
-    window.addEventListener('resize', fitDate);
+    window.addEventListener('resize', fitDisplay);
     tick();
     setInterval(tick, 1000);
     refresh();

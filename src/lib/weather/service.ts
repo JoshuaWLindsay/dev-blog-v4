@@ -117,7 +117,7 @@ export class WeatherService {
     const now = this.clock()
     if (
       !this.pending &&
-      (this.lastAttempt === null || now - this.lastAttempt >= 60)
+      (this.lastAttempt === null || now - this.lastAttempt >= 5)
     ) {
       this.lastAttempt = now
       this.pending = Promise.resolve().then(() => this.update())

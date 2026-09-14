@@ -34,7 +34,7 @@ function browser(time = '2026-09-12T15:43:00Z') {
         window: { innerWidth: 768, innerHeight: 1024,
             addEventListener(name, callback) { events[name] = callback; } },
         setInterval(callback) { tick = callback; },
-        setTimeout(callback, delay) { assert.equal(delay, 60000); const id = nextId++; timers.set(id, callback); return id; },
+        setTimeout(callback, delay) { assert.equal(delay, 5000); const id = nextId++; timers.set(id, callback); return id; },
         clearTimeout(id) { timers.delete(id); }
     });
     return {

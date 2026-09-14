@@ -20,8 +20,8 @@ export const weatherHtml = `<!doctype html>
   <main class="tablet" aria-label="Weather dashboard">
     <div class="temperature" id="temperature" aria-label="Temperature in Fahrenheit">--.-</div>
     <section class="conditions" aria-label="Current conditions">
-      <div class="condition"><span class="label">Rain:</span><span id="rain">--</span></div>
-      <div class="condition"><span class="label">Wind:</span><span id="wind">--</span></div>
+      <div class="condition" role="group" aria-label="Rain"><span id="rain">--</span></div>
+      <div class="condition" role="group" aria-label="Wind"><span id="wind">--</span></div>
     </section>
     <footer class="clock-block" aria-label="Current time and date, Central Time">
       <div class="clock" id="clock">--:--</div>
