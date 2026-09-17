@@ -13,12 +13,13 @@ Weather responses have `X-Robots-Tag: noindex, nofollow, noarchive`, `no-store`,
 namespace-scoped security headers. This is public and unlisted, with no login and
 no navigation or sitemap entry.
 
-The display shows temperature, rain, wind, and the Central Time clock, with the
-weekday above the month/day. Rain and wind readings are centered without visible
-labels. Temperature and time are another 15% larger than the previous dashboard
-(49.5% larger than the original layout), with width fitting for longer readings.
-The two date lines retain their existing size and automatic width fitting. Lightning
-is no longer displayed; its API fields remain available for compatibility.
+The display shows temperature, rain, wind, the seven-day forecast strip, and the
+Central Time clock. The weekday and month/day share one line directly above the
+clock. Rain and wind readings are centered without visible labels. Temperature
+and time stay as large as the forecast strip allows, with width fitting for
+longer readings; the single date line is fitted as one unit so pairs such as
+Wednesday September 30 do not overflow. Lightning is no longer displayed; its API
+fields remain available for compatibility.
 
 ## Weather subdomain
 
@@ -214,8 +215,10 @@ The main temperature and clock use a light system font (weight 300).
 
 The tablet shows a seven-column strip between the wind line and the clock block:
 a weekday letter, the forecast low, the forecast high and the chance of rain.
-Today is the first column and deliberately has no weekday letter, matching the
-original design. Saturday and Sunday share `S`; Thursday is `Th`.
+Today is the first column and is labelled like every other column, so the header
+row stays symmetric and today's letter sits directly above the weekday word on
+the date line below. Saturday and Sunday share `S`; Thursday is `Th`. A column
+the provider did not return is blank rather than shifted.
 
 Forecasts come from Tempest's `better_forecast` endpoint, which is what the
 Tempest app itself calls. The existing `WEATHERFLOW_TOKEN` and
@@ -244,12 +247,14 @@ reports a missing forecast only when no forecast has ever loaded, and only when
 the observation and wind lines have nothing more urgent to say.
 
 Adding four lines of text to a full-height layout required height from elsewhere.
-The temperature and clock move from `0.381225` to `0.31` of the shorter portrait
-dimension (`0.31395`/`0.2691` to `0.24`/`0.205` of viewport height in landscape),
-and the two date lines from `0.117` to `0.095` (`0.0975` to `0.079`). These
-constants live in both `tablet.css` and `fitDisplay` in `tablet.js`, which sets
-inline sizes and wins; both were changed together. The strip shrinks itself if
-seven columns of three digits overflow.
+Collapsing the weekday and month/day onto one line paid most of it back. The
+temperature and clock move from `0.381225` to `0.355` of the shorter portrait
+dimension (`0.31395`/`0.2691` to `0.27`/`0.235` of viewport height in landscape),
+and the combined date line sits at `0.075` (`0.062` in landscape) where the two
+separate lines were `0.117` (`0.0975`). These constants live in both `tablet.css`
+and `fitDisplay` in `tablet.js`, which sets inline sizes and wins; both were
+changed together. The strip shrinks itself if seven columns of three digits
+overflow, and so does the date line.
 
 `npm run test:weather` covers normalization, weekday naming, clamping, missing
 values, provider errors, URL construction, ten-minute caching, stale fallback,
@@ -261,6 +266,6 @@ passed; 53 backend/browser checks passed. The page renders the seven-column
 strip and `/weather/api/forecast` returns a clean 503 with no credential leakage
 when the station is unconfigured. Not yet verified: live `better_forecast`
 readings (no local credentials) and the layout in a real browser at 768x1024 and
-1024x768, including the reduced temperature, clock and date sizes.
+1024x768, including the reordered date line and the resized temperature and clock.
 
 Reference: [Tempest Better Forecast](https://apidocs.tempestwx.com/reference/get_better-forecast-1).

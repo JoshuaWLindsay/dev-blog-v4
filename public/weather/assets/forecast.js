@@ -20,8 +20,9 @@
     function render() {
         for (var i = 0; i < 7; i += 1) {
             var day = latest && latest.days ? latest.days[i] : null;
-            // Today's column carries values but no weekday letter, as designed.
-            put('fc-w' + i, day && i > 0 && day.weekday ? day.weekday : ' ');
+            // Today is labelled like every other column, so the row stays symmetric
+            // and its letter sits directly above the weekday on the date line.
+            put('fc-w' + i, day && day.weekday ? day.weekday : ' ');
             put('fc-l' + i, day && valid(day.low_f) ? String(day.low_f) : '--');
             put('fc-h' + i, day && valid(day.high_f) ? String(day.high_f) : '--');
             put('fc-p' + i, day && valid(day.precip_percent) ? day.precip_percent + '%' : '--');

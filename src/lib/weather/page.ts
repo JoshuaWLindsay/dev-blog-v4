@@ -42,9 +42,8 @@ export const weatherHtml = `<!doctype html>
 ${forecastColumns}
     </section>
     <footer class="clock-block" aria-label="Current time and date, Central Time">
+      <div class="datetime" id="datetime"><span class="day" id="day">Loading day</span><span class="date" id="date">Loading date</span></div>
       <div class="clock" id="clock">--:--</div>
-      <div class="day" id="day">Loading day</div>
-      <div class="date" id="date">Loading date</div>
     </footer>
   </main>
   <p class="status" id="status" role="status">Connecting to weather station...</p>

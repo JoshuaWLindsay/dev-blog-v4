@@ -59,7 +59,7 @@ function weather(extra = {}) {
     }, extra);
 }
 
-test('formats the dashboard with a two-line date and advances the clock without a fetch', () => {
+test('formats the dashboard with a one-line date and advances the clock without a fetch', () => {
     const b = browser();
     b.respond(weather());
     assert.equal(b.elements.temperature.textContent, '102.7');

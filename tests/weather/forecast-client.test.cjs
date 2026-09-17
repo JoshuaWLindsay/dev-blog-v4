@@ -63,10 +63,10 @@ function forecast(changes = {}) {
     }, changes);
 }
 
-test('fills seven columns and leaves today unlabelled', () => {
+test('fills seven columns and labels every day, today included', () => {
     const b = browser();
     b.respond(forecast());
-    assert.equal(b.elements['fc-w0'].textContent, ' ');
+    assert.equal(b.elements['fc-w0'].textContent, 'M');
     assert.equal(b.elements['fc-l0'].textContent, '74');
     assert.equal(b.elements['fc-h0'].textContent, '103');
     assert.equal(b.elements['fc-p0'].textContent, '0%');
@@ -81,9 +81,11 @@ test('missing days and values show dashes rather than zeroes', () => {
     b.respond(forecast({
         days: [{ day_start_local: 0, weekday: 'M', low_f: null, high_f: 103, precip_percent: 0 }]
     }));
+    assert.equal(b.elements['fc-w0'].textContent, 'M');
     assert.equal(b.elements['fc-l0'].textContent, '--');
     assert.equal(b.elements['fc-h0'].textContent, '103');
     assert.equal(b.elements['fc-p0'].textContent, '0%');
+    // A day the provider did not return stays blank rather than borrowing another.
     assert.equal(b.elements['fc-h1'].textContent, '--');
     assert.equal(b.elements['fc-w1'].textContent, ' ');
 });
