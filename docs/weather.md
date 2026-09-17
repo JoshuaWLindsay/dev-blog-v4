@@ -125,7 +125,6 @@ runtime. Physical iOS 12 hardware and the public DNS/deployment remain unverifie
 References: [Next.js Route Handlers](https://nextjs.org/docs/app/api-reference/file-conventions/route),
 [Tempest API](https://weatherflow.github.io/Tempest/api/).
 
-
 ## Full observation dashboard
 
 `https://weather.joshuawlindsay.dev/full` is the desktop dashboard. It is also
@@ -210,3 +209,58 @@ passed; 38 backend/browser checks and eight production HTTP checks passed. The
 live rapid feed returned a newer sample six seconds after the prior sample.
 Brave rendered current wind and the updated NO RAIN label on the main page.
 The main temperature and clock use a light system font (weight 300).
+
+## Seven-day forecast on the main tablet page
+
+The tablet shows a seven-column strip between the wind line and the clock block:
+a weekday letter, the forecast low, the forecast high and the chance of rain.
+Today is the first column and deliberately has no weekday letter, matching the
+original design. Saturday and Sunday share `S`; Thursday is `Th`.
+
+Forecasts come from Tempest's `better_forecast` endpoint, which is what the
+Tempest app itself calls. The existing `WEATHERFLOW_TOKEN` and
+`WEATHERFLOW_STATION_ID` cover it, so no new environment variable, provider or
+credential is introduced. Temperatures are requested in Celsius and converted to
+whole degrees Fahrenheit; the chance of rain is clamped to 0-100. Weekdays come
+from `day_start_local` combined with the payload's `timezone_offset_minutes`, so
+the station's own local day names the column. Days the provider omits render as
+dashes. Hourly forecasts, conditions text and icons are available from the same
+response but are not displayed.
+
+`/weather/api/forecast` returns only `issued_at`, `stale` and the seven days'
+`day_start_local`, `weekday`, `low_f`, `high_f` and `precip_percent`. Station
+latitude/longitude, unit preferences, current conditions and credentials are
+never exposed. The server caches the forecast for ten minutes per warm instance
+and shares in-flight requests, because a daily forecast does not change at the
+observation polling rate. A failed refresh keeps the previous forecast and marks
+it `stale`; a cold instance with no forecast returns 503.
+
+The browser polls `/weather/api/forecast` every 15 minutes in ES5/XHR, retries a
+minute after a failure, and refreshes on visibility, page restore and
+connectivity events. It is a separate asset (`forecast.js`) alongside
+`rapid-wind.js`, so the five-second observation and wind cadences are unchanged.
+An older forecast arriving late cannot replace a newer one. The status line
+reports a missing forecast only when no forecast has ever loaded, and only when
+the observation and wind lines have nothing more urgent to say.
+
+Adding four lines of text to a full-height layout required height from elsewhere.
+The temperature and clock move from `0.381225` to `0.31` of the shorter portrait
+dimension (`0.31395`/`0.2691` to `0.24`/`0.205` of viewport height in landscape),
+and the two date lines from `0.117` to `0.095` (`0.0975` to `0.079`). These
+constants live in both `tablet.css` and `fitDisplay` in `tablet.js`, which sets
+inline sizes and wins; both were changed together. The strip shrinks itself if
+seven columns of three digits overflow.
+
+`npm run test:weather` covers normalization, weekday naming, clamping, missing
+values, provider errors, URL construction, ten-minute caching, stale fallback,
+field allowlisting, column rendering, the 15-minute cadence, out-of-order
+responses, sleep recovery and ES5 syntax.
+
+Forecast verification (September 16, 2026): production build, lint and types
+passed; 53 backend/browser checks passed. The page renders the seven-column
+strip and `/weather/api/forecast` returns a clean 503 with no credential leakage
+when the station is unconfigured. Not yet verified: live `better_forecast`
+readings (no local credentials) and the layout in a real browser at 768x1024 and
+1024x768, including the reduced temperature, clock and date sizes.
+
+Reference: [Tempest Better Forecast](https://apidocs.tempestwx.com/reference/get_better-forecast-1).

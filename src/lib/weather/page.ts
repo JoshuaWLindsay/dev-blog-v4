@@ -1,3 +1,16 @@
+// Seven daily columns: today first, then the next six days.
+const forecastColumns = [0, 1, 2, 3, 4, 5, 6]
+  .map(
+    (index) =>
+      `      <div class="forecast-day">` +
+      `<div class="forecast-weekday" id="fc-w${index}">&nbsp;</div>` +
+      `<div class="forecast-low" id="fc-l${index}">--</div>` +
+      `<div class="forecast-high" id="fc-h${index}">--</div>` +
+      `<div class="forecast-precip" id="fc-p${index}">--</div>` +
+      `</div>`
+  )
+  .join('\n')
+
 // Standalone document, adapted from weather-app/templates/index.html.
 export const weatherHtml = `<!doctype html>
 <html lang="en">
@@ -15,6 +28,7 @@ export const weatherHtml = `<!doctype html>
   <link rel="icon" href="/weather/assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/weather/assets/tablet.css">
   <script src="/weather/assets/rapid-wind.js" defer></script>
+  <script src="/weather/assets/forecast.js" defer></script>
   <script src="/weather/assets/tablet.js" defer></script>
 </head>
 <body>
@@ -23,6 +37,9 @@ export const weatherHtml = `<!doctype html>
     <section class="conditions" aria-label="Current conditions">
       <div class="condition" role="group" aria-label="Rain"><span id="rain">--</span></div>
       <div class="condition" role="group" aria-label="Wind"><span id="wind">--</span></div>
+    </section>
+    <section class="forecast" id="forecast" aria-label="Seven day forecast: low, high and chance of rain">
+${forecastColumns}
     </section>
     <footer class="clock-block" aria-label="Current time and date, Central Time">
       <div class="clock" id="clock">--:--</div>

@@ -46,7 +46,9 @@
         if (latest) {
             var stale = latest.stale || failed || now.getTime() / 1000 - latest.observed_at > 300;
             var windStatus = window.weatherRapidWind ? window.weatherRapidWind.render(latest) : '';
-            put('status', stale ? 'Weather may be out of date. Last reading ' + age(latest.observed_at).toLowerCase() + ' ago. Retrying...' : windStatus);
+            // The live observation outranks wind, which outranks the slow forecast.
+            var forecastStatus = window.weatherForecast ? window.weatherForecast.status() : '';
+            put('status', stale ? 'Weather may be out of date. Last reading ' + age(latest.observed_at).toLowerCase() + ' ago. Retrying...' : windStatus || forecastStatus);
         }
         fitDisplay();
         // Safari can suspend XHR timeout delivery while the tablet sleeps.
@@ -108,7 +110,7 @@
         var element = document.getElementById('date');
         var day = document.getElementById('day');
         var landscape = window.innerWidth > window.innerHeight;
-        var size = landscape ? window.innerHeight * 0.0975 : Math.min(window.innerWidth, window.innerHeight * 0.75) * 0.117;
+        var size = landscape ? window.innerHeight * 0.079 : Math.min(window.innerWidth, window.innerHeight * 0.75) * 0.095;
         element.style.fontSize = size + 'px';
         day.style.fontSize = size + 'px';
         // Keep both lines equally sized, even for September / Wednesday.
@@ -116,15 +118,26 @@
         if (scale < 1) {
             element.style.fontSize = day.style.fontSize = Math.floor(size * scale) + 'px';
         }
-        // Enlarge readings by 15%, fitting longer values such as 102.7 and 10:43.
-        var portraitSize = Math.min(window.innerWidth, window.innerHeight * 0.75) * 0.381225;
+        // The seven-day strip took height from the two largest readings, which stay
+        // as large as fit alongside it. Long values such as 102.7 and 10:43 still fit.
+        var shorter = Math.min(window.innerWidth, window.innerHeight * 0.75);
+        var portraitSize = shorter * 0.31;
         var ids = ['temperature', 'clock'];
-        var sizes = landscape ? [window.innerHeight * 0.31395, window.innerHeight * 0.2691] : [portraitSize, portraitSize];
+        var sizes = landscape ? [window.innerHeight * 0.24, window.innerHeight * 0.205] : [portraitSize, portraitSize];
         for (var i = 0; i < ids.length; i += 1) {
             var reading = document.getElementById(ids[i]);
             reading.style.fontSize = sizes[i] + 'px';
             if (reading.scrollWidth > reading.clientWidth) {
                 reading.style.fontSize = Math.floor(sizes[i] * reading.clientWidth / reading.scrollWidth) + 'px';
+            }
+        }
+        // Seven columns of three digits: shrink the whole strip rather than wrap it.
+        var forecast = document.getElementById('forecast');
+        if (forecast) {
+            var strip = landscape ? window.innerHeight * 0.035 : shorter * 0.04;
+            forecast.style.fontSize = strip + 'px';
+            if (forecast.scrollWidth > forecast.clientWidth) {
+                forecast.style.fontSize = Math.floor(strip * forecast.clientWidth / forecast.scrollWidth) + 'px';
             }
         }
     }

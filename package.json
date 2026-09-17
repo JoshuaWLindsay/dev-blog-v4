@@ -12,7 +12,7 @@
     "lint": "next lint",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:weather": "jest --config jest.weather.config.mjs --runInBand && node --test tests/weather/tablet.test.cjs tests/weather/full.test.cjs tests/weather/rapid-wind.test.cjs",
+    "test:weather": "jest --config jest.weather.config.mjs --runInBand && node --test tests/weather/tablet.test.cjs tests/weather/full.test.cjs tests/weather/rapid-wind.test.cjs tests/weather/forecast-client.test.cjs",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
