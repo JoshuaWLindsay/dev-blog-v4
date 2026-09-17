@@ -34,6 +34,8 @@ test('preserves the full JSON contract, SI conversions, rain and compass wrappin
     wind_mph: 22.37,
     wind_direction: 'WSW',
     raining: false,
+    rain_today_in: null,
+    rain_yesterday_in: null,
     lightning_last_epoch: 1699990000,
     lightning_distance_miles: 6.21,
     lightning_count_3hr: 0,
@@ -42,6 +44,15 @@ test('preserves the full JSON contract, SI conversions, rain and compass wrappin
   expect(normalize(sample({ wind_direction: 360 })).wind_direction).toBe('N')
   expect(normalize(sample({ wind_direction: -90 })).wind_direction).toBe('W')
   expect(normalize(sample({ air_temperature: -40 })).temperature_f).toBe(-40)
+})
+
+test('daily rain accumulations convert to inches and distinguish a dry day from no sensor', () => {
+  const wet = normalize(
+    sample({ precip_accum_local_day: 0, precip_accum_local_yesterday: 8.636 })
+  )
+  expect(wet.rain_today_in).toBe(0)
+  expect(wet.rain_yesterday_in).toBe(0.34)
+  expect(normalize(sample()).rain_today_in).toBeNull()
 })
 
 test('missing and invalid sensor values are not converted to zeroes', () => {

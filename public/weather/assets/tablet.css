@@ -8,11 +8,16 @@ body { font-family: Arial, Helvetica, sans-serif; font-weight: 400; -webkit-text
 .temperature { text-align: center; font-size: 35.5rem; line-height: 1; margin: .5vh 0 .5vh; white-space: nowrap; }
 .conditions { margin: 0 auto; width: 80rem; font-size: 8.2rem; line-height: 1.15; }
 .condition { text-align: center; margin-bottom: .5vh; white-space: nowrap; }
-/* Ordinary flexbox rather than grid: the columns align by equal flex basis. */
-.forecast { display: flex; width: 100%; margin: 1vh 0 0; font-size: 4rem; line-height: 1.12; }
+/* The wind line's own spacing must not widen the gap above the strip. */
+.condition:last-child { margin-bottom: 0; }
+/* Ordinary flexbox rather than grid: the columns align by equal flex basis.
+   Auto top and bottom margins split the leftover height evenly, so the gap to
+   the wind line and the gap to the date line match, and the clock block still
+   lands at the bottom without needing its own auto margin. */
+.forecast { display: flex; width: 100%; margin: auto 0; font-size: 4rem; line-height: 1.12; }
 .forecast-day { flex: 1 1 0; min-width: 0; text-align: center; white-space: nowrap; }
 .forecast-weekday { margin-bottom: .2em; }
-.clock-block { margin-top: auto; padding-top: 2vh; text-align: center; }
+.clock-block { text-align: center; }
 .clock { font-size: 35.5rem; line-height: 1; white-space: nowrap; }
 /* Weekday and month/day share one line above the clock, as one fitted unit. */
 .datetime { font-size: 7.5rem; line-height: 1.1; white-space: nowrap; }
@@ -27,8 +32,7 @@ body { font-family: Arial, Helvetica, sans-serif; font-weight: 400; -webkit-text
   .temperature { font-size: 27vh; margin: 0 0 .5vh; }
   .conditions { font-size: 6vh; line-height: 1.15; margin: 0 auto; width: 75vh; }
   .condition { margin-bottom: .5vh; }
-  .forecast { font-size: 3.5vh; margin: .5vh 0 0; }
-  .clock-block { padding-top: .5vh; }
+  .forecast { font-size: 3.5vh; }
   .clock { font-size: 23.5vh; }
   .datetime { font-size: 6.2vh; }
 }

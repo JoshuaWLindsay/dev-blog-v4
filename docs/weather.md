@@ -269,3 +269,52 @@ readings (no local credentials) and the layout in a real browser at 768x1024 and
 1024x768, including the reordered date line and the resized temperature and clock.
 
 Reference: [Tempest Better Forecast](https://apidocs.tempestwx.com/reference/get_better-forecast-1).
+
+## Landscape dashboard
+
+`https://weather.joshuawlindsay.dev/landscape` is the wide single-screen display,
+also served at `/weather/landscape` on the main site and preview deployments. Its
+plain HTML route bypasses the site layout and framework runtime like the other
+weather pages, and the `/landscape` rewrite applies only to the weather subdomain.
+
+The layout is three bands. The clock and the weekday/month-day line are centred at
+the top. The middle band puts the temperature on the left and the seven-day
+forecast strip on the right. The bottom band is three panels: rain, wind and
+lightning, each a large state word over a smaller detail row. Rain shows yesterday
+and today's accumulation in inches; lightning shows time since the last strike,
+the three-hour strike count and the last strike's distance.
+
+The page reuses `rapid-wind.js` and `forecast.js` unchanged by reusing their
+element ids (`wind`, and `fc-w0`-`fc-p6`), so wind and forecast behave exactly as
+they do on the tablet. `forecast-columns.ts` is the shared markup both pages
+render. `landscape.js` replaces `tablet.js`: it polls `/weather/api` on the same
+five-second cadence with the same sleep, visibility and connectivity handling, and
+carries its own copy of the Central Time rules, matching how each weather asset is
+self-contained. Sizing is pure CSS in viewport units, so there is no `fitDisplay`
+equivalent here.
+
+`RAIN`/`NO RAIN` comes from the observation's `raining` flag, as on the tablet.
+`LIGHTNING`/`NO LIGHTNING` is derived from `lightning_strike_count_last_3hr`: any
+strike in the last three hours reads `LIGHTNING`. Time since the last strike uses a
+compact form for the narrow detail row (`NOW`, `45M`, `6H`, `3D`, and `NONE` for a
+station that has never detected one). Distance is the provider's single reported
+value, for example `25 miles`. The provider returns one distance with no
+uncertainty band, so no range is shown; a range like `24-26 miles` would be
+invented rather than measured.
+
+`/weather/api` gains two additive fields, `rain_today_in` and `rain_yesterday_in`,
+converted from `precip_accum_local_day` and `precip_accum_local_yesterday`. The
+original contract is otherwise unchanged and the tablet ignores them. A dry day is
+`0`, a missing sensor stays `null`, and both render as dashes only when null.
+
+`npm run test:weather` covers the accumulation conversion and every landscape
+region: rendering, compact elapsed at each scale, the quiet-three-hours and raining
+cases, missing readings, the shared API and cadence, failure/recovery with a
+readable age, sleep recovery, and out-of-order responses.
+
+Landscape verification (September 16, 2026): production build, lint and types
+passed; 63 backend/browser checks passed. `/weather/landscape` and the subdomain
+`/landscape` rewrite both return 200 with the noindex and no-store headers, the
+seven shared forecast columns render on both pages, the new assets serve, and the
+tablet and full pages still return 200. Not yet verified: live readings (no local
+credentials) and the layout in a real browser at 1024x768 or on desktop.

@@ -8,6 +8,8 @@ type Observation = {
   wind_mph: number | null
   wind_direction: string | null
   raining: boolean | null
+  rain_today_in: number | null
+  rain_yesterday_in: number | null
   lightning_last_epoch: number | null
   lightning_distance_miles: number | null
   lightning_count_3hr: number | null
@@ -54,6 +56,10 @@ export function normalize(payload: unknown): Observation {
             Math.floor(((((direction % 360) + 360) % 360) + 11.25) / 22.5) % 16
           ],
     raining: rain === null ? null : rain > 0,
+    // Daily accumulations, additive to the original contract: the tablet ignores
+    // them and the landscape page shows yesterday alongside today.
+    rain_today_in: convert(obs.precip_accum_local_day, 1 / 25.4),
+    rain_yesterday_in: convert(obs.precip_accum_local_yesterday, 1 / 25.4),
     lightning_last_epoch: lastStrike,
     lightning_distance_miles:
       lastStrike !== null && lastStrike > 0

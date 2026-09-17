@@ -29,6 +29,11 @@ const nextConfig = {
         has: [{ type: 'host', value: weatherHost }],
         headers: weatherHeaders,
       },
+      {
+        source: '/landscape',
+        has: [{ type: 'host', value: weatherHost }],
+        headers: weatherHeaders,
+      },
     ]
   },
   async rewrites() {
@@ -43,6 +48,11 @@ const nextConfig = {
           source: '/full',
           has: [{ type: 'host', value: weatherHost }],
           destination: '/weather/full',
+        },
+        {
+          source: '/landscape',
+          has: [{ type: 'host', value: weatherHost }],
+          destination: '/weather/landscape',
         },
       ],
     }

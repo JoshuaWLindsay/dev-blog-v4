@@ -1,15 +1,4 @@
-// Seven daily columns: today first, then the next six days.
-const forecastColumns = [0, 1, 2, 3, 4, 5, 6]
-  .map(
-    (index) =>
-      `      <div class="forecast-day">` +
-      `<div class="forecast-weekday" id="fc-w${index}">&nbsp;</div>` +
-      `<div class="forecast-low" id="fc-l${index}">--</div>` +
-      `<div class="forecast-high" id="fc-h${index}">--</div>` +
-      `<div class="forecast-precip" id="fc-p${index}">--</div>` +
-      `</div>`
-  )
-  .join('\n')
+import { forecastColumns } from './forecast-columns'
 
 // Standalone document, adapted from weather-app/templates/index.html.
 export const weatherHtml = `<!doctype html>
@@ -39,7 +28,7 @@ export const weatherHtml = `<!doctype html>
       <div class="condition" role="group" aria-label="Wind"><span id="wind">--</span></div>
     </section>
     <section class="forecast" id="forecast" aria-label="Seven day forecast: low, high and chance of rain">
-${forecastColumns}
+      ${forecastColumns}
     </section>
     <footer class="clock-block" aria-label="Current time and date, Central Time">
       <div class="datetime" id="datetime"><span class="day" id="day">Loading day</span><span class="date" id="date">Loading date</span></div>
