@@ -40,7 +40,7 @@ function browser() {
         Date: Clock, document, XMLHttpRequest: XHR,
         window: {addEventListener(name, handler) { events[name] = handler; }},
         setInterval(fn) { tick = fn; },
-        setTimeout(fn, delay) { assert.equal(delay, 5000); const id = nextId++; timers.set(id, fn); return id; },
+        setTimeout(fn, delay) { assert.equal(delay, 60000); const id = nextId++; timers.set(id, fn); return id; },
         clearTimeout(id) { timers.delete(id); }
     });
     return {
@@ -77,7 +77,7 @@ test('renders full readings, units, missing values and Central Time', () => {
     b.retry(); b.respond(missing);
     assert.equal(b.elements['full-air_temperature'].textContent, '—');
 });
-test('five-second polling retains readings during timeouts and recovers', () => {
+test('60-second polling retains readings during timeouts and recovers', () => {
     const b = browser(); b.respond(sample()); b.retry();
     assert.equal(b.requests[1].url, '/weather/api/full');
     b.requests[1].ontimeout();

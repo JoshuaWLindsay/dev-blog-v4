@@ -82,13 +82,14 @@ five minutes are also stale. Like the Python source, the cache is process-local:
 serverless cold starts and separate instances do not share it. The tablet retains
 its last reading across API failures, including a cold instance's 503.
 
-The client polls five seconds after each completed request, with a 20-second timeout,
-and refreshes on visibility, page restore and connectivity events. A wall-clock
+The tablet, landscape, and full clients poll 60 seconds after each completed request,
+with a 20-second timeout, and refresh on visibility, page restore and connectivity
+events. A wall-clock
 check cancels requests suspended during sleep; late responses cannot overwrite
 newer readings. The Central Time clock runs independently using US DST rules,
 without `Intl`. The client remains ES5/XHR with Safari 12-compatible
 CSS and portrait/landscape layout. The provider may publish new observations less
-frequently than the five-second polling interval.
+frequently than the 60-second polling interval.
 
 ## Verification
 
@@ -104,7 +105,7 @@ node --test tests/weather/http.test.cjs
 
 The focused Jest configuration leaves the pre-existing configuration unchanged.
 Checks cover conversions, missing data, cache timing/concurrency, stale fallback,
-timeouts, secret isolation, Central Time/DST, ES5 syntax, five-second polling, sleep
+timeouts, secret isolation, Central Time/DST, ES5 syntax, 60-second polling, sleep
 recovery and raw HTML. HTTP checks inspect built routes and regular site pages.
 Set `WEATHER_TEST_BASE_URL` for another origin and `WEATHER_TEST_LIVE=1` to require
 a fresh live observation instead of allowing an unconfigured 503.
@@ -181,7 +182,7 @@ The main page displays a current `rapid_wind` sample instead of `wind_avg`.
 The average, gust and lull remain on `/full`. Temperature and rain still use
 the station observation endpoint, which normally publishes once per minute.
 
-The browser requests `/weather/api/wind` on a five-second start-to-start cadence
+The browser requests `/weather/api/wind` on a 60-second start-to-start cadence
 using ES5/XHR. It never contacts Tempest directly. Node 24 opens a bounded outbound
 WebSocket, subscribes to the configured station's active wind device, receives
 one current sample, closes the socket, and returns only its timestamp, mph and
@@ -192,7 +193,8 @@ Device metadata is cached for an hour; simultaneous requests within one warm
 server instance share a sample request and attempts are limited to every five
 seconds. Nothing depends on a socket running after the HTTP response finishes.
 
-A sample expires after 15 seconds. If live wind is unavailable, the tablet
+A sample expires after 15 seconds, so between the 60-second polls the display
+falls back to the one-minute average. If live wind is unavailable, the tablet
 explicitly labels its fallback to the one-minute average in the status line.
 The feed retries automatically, pauses when hidden and recovers after sleep.
 Provider sampling (normally three seconds), network latency, and power-saving
@@ -241,7 +243,7 @@ it `stale`; a cold instance with no forecast returns 503.
 The browser polls `/weather/api/forecast` every 15 minutes in ES5/XHR, retries a
 minute after a failure, and refreshes on visibility, page restore and
 connectivity events. It is a separate asset (`forecast.js`) alongside
-`rapid-wind.js`, so the five-second observation and wind cadences are unchanged.
+`rapid-wind.js`, with observation and wind polling on separate 60-second cadences.
 An older forecast arriving late cannot replace a newer one. The status line
 reports a missing forecast only when no forecast has ever loaded, and only when
 the observation and wind lines have nothing more urgent to say.
@@ -288,7 +290,7 @@ The page reuses `rapid-wind.js` and `forecast.js` unchanged by reusing their
 element ids (`wind`, and `fc-w0`-`fc-p6`), so wind and forecast behave exactly as
 they do on the tablet. `forecast-columns.ts` is the shared markup both pages
 render. `landscape.js` replaces `tablet.js`: it polls `/weather/api` on the same
-five-second cadence with the same sleep, visibility and connectivity handling, and
+60-second cadence with the same sleep, visibility and connectivity handling, and
 carries its own copy of the Central Time rules, matching how each weather asset is
 self-contained. Sizing is pure CSS in viewport units, so there is no `fitDisplay`
 equivalent here.

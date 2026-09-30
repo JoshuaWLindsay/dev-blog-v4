@@ -33,7 +33,7 @@ function browser(time = '2026-09-14T16:47:00Z') {
         Date: Clock, document, XMLHttpRequest: XHR,
         window: { addEventListener(name, callback) { events[name] = callback; } },
         setInterval(callback) { tick = callback; },
-        setTimeout(callback, delay) { assert.equal(delay, 5000); const id = nextId++; timers.set(id, callback); return id; },
+        setTimeout(callback, delay) { assert.equal(delay, 60000); const id = nextId++; timers.set(id, callback); return id; },
         clearTimeout(id) { timers.delete(id); }
     });
     return {

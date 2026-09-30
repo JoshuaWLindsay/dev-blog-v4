@@ -41,8 +41,8 @@
             pending = false;
             failed = !ok;
             render();
-            // Start-to-start cadence: time waiting for a sample counts toward 5s.
-            timer = setTimeout(refresh, Math.max(100, 5000 - (now() - started)));
+            // Start-to-start cadence: time waiting for a sample counts toward 60s.
+            timer = setTimeout(refresh, Math.max(100, 60000 - (now() - started)));
         }
         cancel = function () { complete(false); xhr.abort(); };
         xhr.onload = function () {

@@ -53,11 +53,11 @@ test('main dashboard uses rapid speed and direction without changing other weath
     assert.equal(b.elements.wind.textContent, 'S 2.1 mph');
 });
 
-test('five-second rapid cadence includes network latency', () => {
+test('60-second rapid cadence includes network latency', () => {
     const b = browser();
     b.advance(3000);
     b.respond('/weather/api/wind', b.wind());
-    assert.equal([...b.timers.values()][0].delay, 2000);
+    assert.equal([...b.timers.values()][0].delay, 57000);
     b.retry();
     assert.equal(b.requests.filter(r => r.url === '/weather/api/wind').length, 2);
 });

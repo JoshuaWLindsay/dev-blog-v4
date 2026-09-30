@@ -107,7 +107,7 @@
             pending = false;
             failed = !ok;
             tick();
-            timer = setTimeout(refresh, 5000);
+            timer = setTimeout(refresh, 60000);
         }
         cancelRequest = function () { complete(false); xhr.abort(); };
         xhr.onload = function () {
