@@ -34,6 +34,7 @@ test('preserves the full JSON contract, SI conversions, rain and compass wrappin
     wind_mph: 22.37,
     wind_direction: 'WSW',
     raining: false,
+    rain_intensity: 'NONE',
     rain_today_in: null,
     rain_yesterday_in: null,
     lightning_last_epoch: 1699990000,
@@ -54,6 +55,24 @@ test('daily rain accumulations convert to inches and distinguish a dry day from 
   expect(wet.rain_yesterday_in).toBe(0.34)
   expect(normalize(sample()).rain_today_in).toBeNull()
 })
+
+test.each([
+  [0, 'NONE'],
+  [0.001, 'VERY LIGHT'],
+  [0.25 / 60, 'LIGHT'],
+  [1 / 60, 'MODERATE'],
+  [4 / 60, 'HEAVY'],
+  [16 / 60, 'VERY HEAVY'],
+  [50 / 60, 'EXTREME'],
+  [null, null],
+  [-1, null],
+  [NaN, null],
+])(
+  'rain intensity follows Tempest thresholds for %s mm/min',
+  (precip, expected) => {
+    expect(normalize(sample({ precip })).rain_intensity).toBe(expected)
+  }
+)
 
 test('missing and invalid sensor values are not converted to zeroes', () => {
   const data = normalize({ obs: [{ timestamp: 1700000000 }] })

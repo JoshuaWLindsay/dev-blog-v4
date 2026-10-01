@@ -24,7 +24,7 @@ export const weatherHtml = `<!doctype html>
   <main class="tablet" aria-label="Weather dashboard">
     <div class="temperature" id="temperature" aria-label="Temperature in Fahrenheit">--.-</div>
     <section class="conditions" aria-label="Current conditions">
-      <div class="condition" role="group" aria-label="Rain"><span id="rain">--</span></div>
+      <div class="condition rain-condition" role="group" aria-label="Rain"><span id="rain" aria-label="Current rain intensity">--</span><span id="rain-today" aria-label="Today's rainfall in inches">--</span></div>
       <div class="condition" role="group" aria-label="Wind"><span id="wind">--</span></div>
     </section>
     <section class="forecast" id="forecast" aria-label="Seven day forecast: low, high and chance of rain">

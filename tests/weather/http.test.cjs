@@ -37,7 +37,7 @@ test('weather routes are isolated, noindex, and uncached over HTTP', async () =>
             assert.match(response.headers.get('content-type'), /text\/html/);
             assert.doesNotMatch(body, /_next|__NEXT|<nav/);
             assert.match(body, /name="robots" content="noindex/);
-            assert.equal((body.match(/<script\b/g) || []).length, 2);
+            assert.equal((body.match(/<script\b/g) || []).length, 3);
         }
         if (path === '/weather/api') {
             const data = JSON.parse(body);
@@ -50,6 +50,7 @@ test('weather routes are isolated, noindex, and uncached over HTTP', async () =>
             if (response.ok) {
                 assert.deepEqual(Object.keys(data).sort(), [
                     'observed_at', 'temperature_f', 'wind_mph', 'wind_direction', 'raining',
+                    'rain_intensity', 'rain_today_in', 'rain_yesterday_in',
                     'lightning_last_epoch', 'lightning_distance_miles', 'lightning_count_3hr', 'stale',
                 ].sort());
             } else {

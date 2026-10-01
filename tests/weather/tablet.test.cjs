@@ -54,6 +54,7 @@ function weather(extra = {}) {
     return Object.assign({
         observed_at: Date.parse('2026-09-12T15:43:00Z') / 1000,
         temperature_f: 102.7, raining: false, wind_direction: 'WSW', wind_mph: 4.7,
+        rain_intensity: 'NONE', rain_today_in: 0,
         lightning_last_epoch: Date.parse('2026-09-11T23:43:00Z') / 1000,
         lightning_distance_miles: 21.5, lightning_count_3hr: 124, stale: false
     }, extra);
@@ -63,7 +64,8 @@ test('formats the dashboard with a one-line date and advances the clock without 
     const b = browser();
     b.respond(weather());
     assert.equal(b.elements.temperature.textContent, '102.7');
-    assert.equal(b.elements.rain.textContent, 'NO RAIN');
+    assert.equal(b.elements.rain.textContent, 'NONE');
+    assert.equal(b.elements['rain-today'].textContent, '0.00');
     assert.equal(b.elements.wind.textContent, 'WSW 4.7 mph');
     assert.equal(b.elements.clock.textContent, '10:43');
     assert.equal(b.elements.day.textContent, 'Saturday');
@@ -132,11 +134,23 @@ test('wake and online events refresh without overlapping requests', () => {
 
 test('distinguishes missing readings from measured zeroes', () => {
     const b = browser();
-    b.respond(weather({temperature_f: null, raining: null, wind_mph: 0,
+    b.respond(weather({temperature_f: null, raining: null, rain_intensity: null, rain_today_in: null, wind_mph: 0,
         lightning_last_epoch: 0, lightning_distance_miles: null, lightning_count_3hr: 0}));
     assert.equal(b.elements.temperature.textContent, '--.-');
     assert.equal(b.elements.rain.textContent, '--');
+    assert.equal(b.elements['rain-today'].textContent, '--');
     assert.equal(b.elements.wind.textContent, 'WSW 0.0 mph');
+});
+
+test('shows current rain intensity separately from today\'s total, including after rain stops', () => {
+    const b = browser();
+    b.respond(weather({raining: true, rain_intensity: 'HEAVY', rain_today_in: 0.11}));
+    assert.equal(b.elements.rain.textContent, 'HEAVY');
+    assert.equal(b.elements['rain-today'].textContent, '0.11');
+    b.retry();
+    b.respond(weather({rain_today_in: 0.11}));
+    assert.equal(b.elements.rain.textContent, 'NONE');
+    assert.equal(b.elements['rain-today'].textContent, '0.11');
 });
 
 test('uses the dedicated API, a 20-second timeout, and ES5 syntax', () => {

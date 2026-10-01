@@ -8,6 +8,8 @@ body { font-family: Arial, Helvetica, sans-serif; font-weight: 400; -webkit-text
 .temperature { text-align: center; font-size: 35.5rem; line-height: 1; margin: .5vh 0 .5vh; white-space: nowrap; }
 .conditions { margin: 0 auto; width: 80rem; font-size: 8.2rem; line-height: 1.15; }
 .condition { text-align: center; margin-bottom: .5vh; white-space: nowrap; }
+.rain-condition { display: flex; justify-content: space-between; align-items: baseline; }
+.rain-condition > span + span { margin-left: .5em; }
 /* The wind line's own spacing must not widen the gap above the strip. */
 .condition:last-child { margin-bottom: 0; }
 /* Ordinary flexbox rather than grid: the columns align by equal flex basis.

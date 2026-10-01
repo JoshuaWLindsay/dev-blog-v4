@@ -15,7 +15,9 @@ no navigation or sitemap entry.
 
 The display shows temperature, rain, wind, the seven-day forecast strip, and the
 Central Time clock. The weekday and month/day share one line directly above the
-clock. Rain and wind readings are centered without visible labels. Temperature
+clock. The rain row shows current intensity on the left (`NONE`, `LIGHT`,
+`HEAVY`, etc.) and today's accumulation on the right to two decimal places,
+without a visible title or unit. Wind is centered without a visible label. Temperature
 and time stay as large as the forecast strip allows, with width fitting for
 longer readings; the single date line is fitted as one unit so pairs such as
 Wednesday September 30 do not overflow. Lightning is no longer displayed; its API
@@ -65,8 +67,10 @@ Use the existing Node.js Next.js host or its serverless adapter; static export
 alone cannot serve the API.
 
 The API requests Celsius, metres/second, millimetres and kilometres, then converts
-to Fahrenheit, mph and miles. Rain is the latest observation's accumulation, not
-a daily total. Missing sensors remain `null`.
+to Fahrenheit, mph, miles and inches. `rain_intensity` uses the latest one-minute
+accumulation and [Tempest's rain-rate thresholds](https://weatherflow.github.io/Tempest/api/derived-metric-formulas.html#rain-rate).
+The separate `rain_today_in` value is the daily total, so it remains visible after
+rain stops. Missing sensors remain `null` and display as dashes.
 
 The provider URL uses `/observations/station/{station_id}`, matching the original
 app's configured endpoint and returning named fields plus lightning summaries.
@@ -295,7 +299,7 @@ carries its own copy of the Central Time rules, matching how each weather asset 
 self-contained. Sizing is pure CSS in viewport units, so there is no `fitDisplay`
 equivalent here.
 
-`RAIN`/`NO RAIN` comes from the observation's `raining` flag, as on the tablet.
+`RAIN`/`NO RAIN` on the landscape page comes from the observation's `raining` flag.
 `LIGHTNING`/`NO LIGHTNING` is derived from `lightning_strike_count_last_3hr`: any
 strike in the last three hours reads `LIGHTNING`. Time since the last strike uses a
 compact form for the narrow detail row (`NOW`, `45M`, `6H`, `3D`, and `NONE` for a
@@ -306,7 +310,7 @@ invented rather than measured.
 
 `/weather/api` gains two additive fields, `rain_today_in` and `rain_yesterday_in`,
 converted from `precip_accum_local_day` and `precip_accum_local_yesterday`. The
-original contract is otherwise unchanged and the tablet ignores them. A dry day is
+tablet also uses today's accumulation alongside the current rain intensity. A dry day is
 `0`, a missing sensor stays `null`, and both render as dashes only when null.
 
 `npm run test:weather` covers the accumulation conversion and every landscape

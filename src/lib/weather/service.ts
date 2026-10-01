@@ -8,6 +8,7 @@ type Observation = {
   wind_mph: number | null
   wind_direction: string | null
   raining: boolean | null
+  rain_intensity: string | null
   rain_today_in: number | null
   rain_yesterday_in: number | null
   lightning_last_epoch: number | null
@@ -28,6 +29,20 @@ function convert(value: unknown, multiplier: number, offset = 0) {
   return numeric === null
     ? null
     : Math.round((numeric * multiplier + offset) * 100) / 100
+}
+
+function rainIntensity(accumulation: number | null): string | null {
+  if (accumulation === null || accumulation < 0) return null
+  // Tempest's latest one-minute accumulation (mm), extrapolated to mm/hour.
+  // https://weatherflow.github.io/Tempest/api/derived-metric-formulas.html#rain-rate
+  const rate = accumulation * 60
+  if (rate === 0) return 'NONE'
+  if (rate < 0.25) return 'VERY LIGHT'
+  if (rate < 1) return 'LIGHT'
+  if (rate < 4) return 'MODERATE'
+  if (rate < 16) return 'HEAVY'
+  if (rate < 50) return 'VERY HEAVY'
+  return 'EXTREME'
 }
 
 export function normalize(payload: unknown): Observation {
@@ -56,8 +71,8 @@ export function normalize(payload: unknown): Observation {
             Math.floor(((((direction % 360) + 360) % 360) + 11.25) / 22.5) % 16
           ],
     raining: rain === null ? null : rain > 0,
-    // Daily accumulations, additive to the original contract: the tablet ignores
-    // them and the landscape page shows yesterday alongside today.
+    rain_intensity: rainIntensity(rain),
+    // Daily totals are independent of the current rain intensity.
     rain_today_in: convert(obs.precip_accum_local_day, 1 / 25.4),
     rain_yesterday_in: convert(obs.precip_accum_local_yesterday, 1 / 25.4),
     lightning_last_epoch: lastStrike,

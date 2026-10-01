@@ -58,7 +58,8 @@
     function render(data) {
         put('temperature', valid(data.temperature_f) ? data.temperature_f.toFixed(1) : '--.-');
         document.getElementById('temperature').setAttribute('aria-label', valid(data.temperature_f) ? data.temperature_f.toFixed(1) + ' degrees Fahrenheit' : 'Temperature unavailable');
-        put('rain', data.raining === true ? 'YES' : data.raining === false ? 'NO RAIN' : '--');
+        put('rain', data.rain_intensity || '--');
+        put('rain-today', valid(data.rain_today_in) ? data.rain_today_in.toFixed(2) : '--');
         put('wind', (data.wind_direction || '--') + ' ' + (valid(data.wind_mph) ? data.wind_mph.toFixed(1) : '--') + ' mph');
         tick();
     }
